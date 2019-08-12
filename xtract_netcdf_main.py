@@ -119,8 +119,9 @@ if __name__ == "__main__":
 
     t0 = time.time()
     meta = {"netcdf": extract_netcdf_metadata(args.path)}
-    print(meta)
     t1 = time.time() - t0
+    meta.update({"extract time": t1})
+    print(meta)
     print(t1)
 
 
