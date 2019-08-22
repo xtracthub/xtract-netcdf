@@ -41,7 +41,7 @@ class NumpyDecoder(json.JSONEncoder):
             return super(NumpyDecoder, self).default(obj)
 
 
-def extract_netcdf_metadata(file_handle, pass_fail=False):
+def extract_netcdf(file_handle, pass_fail=False):
     """Create netcdf metadata dictionary from file.
 
     ParametersL
@@ -53,6 +53,7 @@ def extract_netcdf_metadata(file_handle, pass_fail=False):
     (dictionary): Dictionary of file format, global attributes,
     dimensions, variables and attributes.
     """
+    t0 = time.time()
     try:
         dataset = Dataset(os.path.realpath(file_handle))
     except IOError:
@@ -89,7 +90,10 @@ def extract_netcdf_metadata(file_handle, pass_fail=False):
             }
         add_ncattr_metadata(dataset, var, "variables", metadata)
 
-    return json.loads(json.dumps(metadata, cls=NumpyDecoder))
+    meta = {"netcdf": json.loads(json.dumps(metadata, cls=NumpyDecoder))}
+    meta.update({"extract time": time.time() - t0})
+
+    return meta
 
 
 def add_ncattr_metadata(dataset, name, dim_or_var, metadata):
@@ -117,12 +121,8 @@ if __name__ == "__main__":
                        type=str, required=True)
     args = parse.parse_args()
 
-    t0 = time.time()
-    meta = {"netcdf": extract_netcdf_metadata(args.path)}
-    t1 = time.time() - t0
-    meta.update({"extract time": t1})
+    meta = extract_netcdf(args.path)
     print(meta)
-    print(t1)
 
 
 
