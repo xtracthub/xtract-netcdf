@@ -41,6 +41,16 @@ class NumpyDecoder(json.JSONEncoder):
             return super(NumpyDecoder, self).default(obj)
 
 
+def execute_extractor(filename):
+    t0 = time.time()
+    if not filename:
+        return None
+    metadata = extract_netcdf(file_handle=filename)
+    t1 = time.time()
+    metadata.update({"extract time": (t1 - t0)})
+    return metadata
+
+
 def extract_netcdf(file_handle, pass_fail=False):
     """Create netcdf metadata dictionary from file.
 
