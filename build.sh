@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE_NAME='xtract_netcdf_image'
+IMAGE_NAME='xtract-netcdf'
 
 docker rmi -f $IMAGE_NAME
 
