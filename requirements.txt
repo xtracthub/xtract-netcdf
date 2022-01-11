@@ -2,4 +2,4 @@ netCDF4
 numpy
 funcx
 funcx_endpoint
-xtract_sdk==0.0.7a2
+xtract_sdk==0.0.7a6
